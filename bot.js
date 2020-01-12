@@ -5,9 +5,8 @@ const v8 = require('v8');
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
-    var raidchannel = client.channels.get('665850004887306251');
-    //665874872341233664 - VanillaIce Raid Notice Channel
-    //665850004887306251 - DES Test Channel
+    var raidchannel = client.channels.get(process.env.CHANNEL_ID);
+
     var schedule = require('node-schedule-tz');
     const startingHour = 15; const startHour = 16; const endingHour = 0; const endHour = 2;
     const kovDays = [0,2,4,6]; const kofDays = [1,3,5,0]; const kofOffDays = [1,2,4,6]; const kovOffDays = [1,3,5,0];
