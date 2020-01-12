@@ -50,7 +50,7 @@ client.on('ready', () => {
     });
 
     var kov_start = schedule.scheduleJob(kov_rule2, function() {
-      raidchannel.send("King of Voracity raid (LV 87) has opened. The raid will remain open for the next 10 hours.");
+      raidchannel.send("King of Voracity raid (LV 87) has opened. The raid will remain open for the next 10 hours.\nhttps://imgur.com/eVboHcQ");
     });
 
     var kov_ending = schedule.scheduleJob(kov_rule3, function() {
@@ -67,7 +67,7 @@ client.on('ready', () => {
     });
 
     var kof_start = schedule.scheduleJob(kof_rule2, function() {
-      raidchannel.send("King of Flies raid (LV 85) has opened. The raid will remain open for the next 10 hours.");
+      raidchannel.send("King of Flies raid (LV 85) has opened. The raid will remain open for the next 10 hours.\nhttps://imgur.com/PJVbqvz");
     });
 
     var kof_ending = schedule.scheduleJob(kof_rule3, function() {
