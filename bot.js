@@ -47,36 +47,36 @@ client.on('ready', () => {
 
     var kov_starting = schedule.scheduleJob(kov_rule1, function() {
       raidchannel.send("King of Voracity raid (LV 87) will open in 1 hour. Get ready!");
-    })
+    });
 
     var kov_start = schedule.scheduleJob(kov_rule2, function() {
       raidchannel.send("King of Voracity raid (LV 87) has opened. The raid will remain open for the next 10 hours.");
-    })
+    });
 
     var kov_ending = schedule.scheduleJob(kov_rule3, function() {
       raidchannel.send("King of Voracity raid (LV 87) will end in 2 hours.");
-    })
+    });
 
     var kov_end = schedule.scheduleJob(kov_rule4, function() {
       raidchannel.send("King of Voracity raid (LV 87) has ended.");
-    })
+    });
 
     //King of Flies
     var kof_starting = schedule.scheduleJob(kof_rule1, function() {
       raidchannel.send("King of Flies raid (LV 85) will open in 1 hour. Get ready!");
-    })
+    });
 
     var kof_start = schedule.scheduleJob(kof_rule2, function() {
       raidchannel.send("King of Flies raid (LV 85) has opened. The raid will remain open for the next 10 hours.");
-    })
+    });
 
     var kof_ending = schedule.scheduleJob(kof_rule3, function() {
       raidchannel.send("King of Flies raid (LV 85) will end in 2 hours.");
-    })
+    });
 
     var kof_end = schedule.scheduleJob(kof_rule4, function() {
       raidchannel.send("King of Flies raid (LV 85) has ended.");
-    })
+    });
 });
 
 client.login(process.env.TOKEN);
