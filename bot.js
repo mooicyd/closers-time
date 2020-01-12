@@ -8,27 +8,23 @@ client.on('ready', () => {
     var raidchannel = client.channels.get(process.env.CHANNEL_ID);
 
     var schedule = require('node-schedule-tz');
-    const startingHour = 15; const startHour = 16; const endingHour = 0; const endHour = 2;
-    const kovDays = [0,2,4,6]; const kofDays = [1,3,5,0]; const kofOffDays = [1,2,4,6]; const kovOffDays = [1,3,5,0];
-    const korea = 'Asia/South Korea';
+    const startingHour = 7; const startHour = 8; const endingHour = 16; const endHour = 18;
+    const kovDays = [0,2,4,6]; const kofDays = [1,3,5,0]; //const kofOffDays = [1,2,4,6]; const kovOffDays = [1,3,5,0];
 
     //King of Voracity Timers
     var kov_rule1 = new schedule.RecurrenceRule();
     kov_rule1.minute = 0;
     kov_rule1.hour = startingHour;
     kov_rule1.dayOfWeek = kovDays;
-    kov_rule1.tz = korea;
 
     var kov_rule2 = v8.deserialize(v8.serialize(kov_rule1));
     kov_rule2.hour = startHour;
 
     var kov_rule3 = v8.deserialize(v8.serialize(kov_rule2));
     kov_rule3.hour = endingHour;
-    kov_rule3.dayOfWeek = kovOffDays;
 
     var kov_rule4 = v8.deserialize(v8.serialize(kov_rule3));
     kov_rule4.hour = endHour;
-    kov_rule4.dayOfWeek = kovOffDays;
 
     //King of Flies Timers
     var kof_rule1 = v8.deserialize(v8.serialize(kov_rule1));
@@ -39,11 +35,9 @@ client.on('ready', () => {
 
     var kof_rule3 = v8.deserialize(v8.serialize(kof_rule2));
     kof_rule3.hour = endingHour;
-    kof_rule3.dayOfWeek = kofOffDays;
 
     var kof_rule4 = v8.deserialize(v8.serialize(kof_rule3));
     kof_rule4.hour = endHour;
-    kof_rule4.dayOfWeek = kofOffDays;
 
     var kov_starting = schedule.scheduleJob(kov_rule1, function() {
       raidchannel.send("King of Voracity raid (LV 87) will open in 1 hour. Get ready!");
