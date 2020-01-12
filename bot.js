@@ -24,6 +24,7 @@ client.on('ready', () => {
 
     var kov_rule3 = v8.deserialize(v8.serialize(kov_rule2));
     kov_rule3.hour = endingHour;
+    kov_rule3.dayOfWeek = kovOffDays;
 
     var kov_rule4 = v8.deserialize(v8.serialize(kov_rule3));
     kov_rule4.hour = endHour;
@@ -38,6 +39,7 @@ client.on('ready', () => {
 
     var kof_rule3 = v8.deserialize(v8.serialize(kof_rule2));
     kof_rule3.hour = endingHour;
+    kof_rule3.dayOfWeek = kofOffDays;
 
     var kof_rule4 = v8.deserialize(v8.serialize(kof_rule3));
     kof_rule4.hour = endHour;
@@ -61,7 +63,7 @@ client.on('ready', () => {
 
     //King of Flies
     var kof_starting = schedule.scheduleJob(kof_rule1, function() {
-      raidchannel.send("King of Flies raid (LV 85) has open in 1 hour. Get ready!");
+      raidchannel.send("King of Flies raid (LV 85) will open in 1 hour. Get ready!");
     })
 
     var kof_start = schedule.scheduleJob(kof_rule2, function() {
