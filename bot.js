@@ -17,7 +17,7 @@ client.on('ready', () => {
     kov_rule1.minute = 0;
     kov_rule1.hour = startingHour;
     kov_rule1.dayOfWeek = kovDays;
-    kov_rule1.tz = korea;
+    //kov_rule1.tz = korea;
 
     var kov_rule2 = v8.deserialize(v8.serialize(kov_rule1));
     kov_rule2.hour = startHour;
