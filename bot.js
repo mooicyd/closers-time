@@ -8,12 +8,13 @@ client.on('ready', () => {
 
     var raidchannel = client.channels.get(process.env.CHANNEL_ID);
 
-    const RAID_STARTING_H = 15; const RAID_START_H = 16; const RAID_ENDING_H = 0; const RAID_END_H = 2; const TEN_HOUR = 36000000; const ONE_HOUR = 3600000; const TWO_HOUR = 7200000; const FIVE_MIN = 300000;
+    const RAID_STARTING_H = 15; const RAID_START_H = 16; const RAID_ENDING_H = 0; const RAID_END_H = 2;
+    const TEN_HOUR = 36000000; const ONE_HOUR = 3600000; const TWO_HOUR = 7200000; const THIRTY_MIN = 1800000; const FIVE_MIN = 300000;
     const KOV_DAYS = [0,2,4,6]; const KOF_DAYS = [1,3,5,0]; const NO_KOF_DAYS = [1,2,4,6]; const NO_KOV_DAYS = [1,3,5,0];
     const KOV_RAID = "King of Voracity raid (LV87) "; const KOF_RAID = "King of Flies raid (LV85) "; const KOF_IMG = "\nhttps://imgur.com/PJVbqvz"; const KOV_IMG = "\nhttps://imgur.com/eVboHcQ";
     const RAID_STARTING = "will open in 1 hour. Get Ready!"; const RAID_START = "has opened. The raid will remain open for the next 10 hours."; const RAID_ENDING = "will end in 2 hours.";
     const RAID_END = "has ended."; const OVERFLOOD = "Overflood "; const OF_L_START = "has opened. The dungeon will remain open for 1 hour."; const OF_S_START = "has opened. The dungeon will remain open for 30 minutes".;
-    const OF_L_TIMES = [10, 15, 18, 20, 23]; const OF_S_TIMES = [0, 1];
+    const OF_L_TIMES = [10, 15, 18, 20, 23]; const OF_S_TIMES = [0, 1]; const OF_IMG = "\nhttps://imgur.com/DrfvjPv";
 
     //King of Voracity Timers
     var kov_rule1 = new schedule.RecurrenceRule();
@@ -47,6 +48,18 @@ client.on('ready', () => {
 
     //King of Voracity
 
+    var ofLong = setUpRulesH(OF_L_TIMES);
+
+    ofLong.forEach(function(rule) {
+        scheduleMessage(raidchannel, OVERFLOOD, rule, OF_L_START, ONE_HOUR, OF_IMG);
+    })
+
+    var ofShort = setUpRulesH(OF_S_TIMES);
+
+    ofShort.forEach(function(rule) {
+        scheduleMessage(raidchannel, OVERFLOOD, rule, OF_S_START, THIRTY_MIN, OF_IMG);
+    })
+
     scheduleMessage(raidchannel, KOV_RAID, kov_rule1, RAID_STARTING, ONE_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, TEN_HOUR, KOV_IMG);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
@@ -61,6 +74,17 @@ client.on('ready', () => {
 });
 
 client.login(process.env.TOKEN);
+
+function setUpRulesH(hours) {
+    var rules = new Array();
+    hours.forEach(function(value) {
+        var rule = new schedule.RecurrenceRule();
+        rule.minute = 0;
+        rule.hour = value;
+        rules.push(rule);
+    })
+    return rules;
+}
 
 function scheduleMessage(channel, dungeon, rule, status, timeout, image) {
     if(image === undefined) {
