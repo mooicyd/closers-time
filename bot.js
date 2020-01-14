@@ -105,6 +105,6 @@ function clearMessages(channel) {
     cleanup_rule.hour = 4;
 
     var cleanup = schedule.scheduleJob(cleanup_rule, function() {
-      channel.bulkDelete(100).then(console.log("Cleaned messages"));
+      channel.bulkDelete(100).then(msg => console.log(`Cleaned ${msg.size} messages`));
   });
 }
