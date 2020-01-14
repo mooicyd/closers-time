@@ -9,7 +9,7 @@ client.on('ready', () => {
     var raidchannel = client.channels.get(process.env.CHANNEL_ID);
 
     const RAID_STARTING_H = 15; const RAID_START_H = 16; const RAID_ENDING_H = 0; const RAID_END_H = 2;
-    const TEN_HOUR = 36000000; const ONE_HOUR = 3600000; const TWO_HOUR = 7200000; const THIRTY_MIN = 1800000; const FIVE_MIN = 300000; const HALF_HOUR = 30;
+    const ONE_HOUR = 3600000; const TWO_HOUR = 7200000; const THIRTY_MIN = 1800000; const FIVE_MIN = 300000; const HALF_HOUR = 30; const NDEF = -1;
     const KOV_DAYS = [0,2,4,6]; const KOF_DAYS = [1,3,5,0]; const NO_KOF_DAYS = [1,2,4,6]; const NO_KOV_DAYS = [1,3,5,0];
     const KOV_RAID = "King of Voracity raid (LV87) "; const KOF_RAID = "King of Flies raid (LV85) "; const KOF_IMG = "\nhttps://imgur.com/PJVbqvz"; const KOV_IMG = "\nhttps://imgur.com/eVboHcQ";
     const RAID_STARTING = "will open in 1 hour. Get Ready!"; const RAID_START = "has opened. The raid will remain open for the next 10 hours."; const RAID_ENDING = "will end in 2 hours.";
@@ -61,12 +61,12 @@ client.on('ready', () => {
     })
 
     scheduleMessage(raidchannel, KOV_RAID, kov_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, TEN_HOUR, KOV_IMG);
+    scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, NDEF, KOV_IMG);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END, FIVE_MIN);
 
     scheduleMessage(raidchannel, KOF_RAID, kof_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, TEN_HOUR, KOF_IMG);
+    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, KOF_IMG);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END, FIVE_MIN);
 
@@ -95,7 +95,7 @@ function scheduleMessage(channel, dungeon, rule, status, timeout, image) {
     }
 
     var job = schedule.scheduleJob(rule, function () {
-        channel.send(dungeon + status + image).then(msg => msg.delete(timeout));
+        channel.send(dungeon + status + image).then(msg => if (timeout !== NDEF){msg.delete(timeout)});
     })
 }
 
@@ -105,6 +105,6 @@ function clearMessages(channel) {
     cleanup_rule.hour = 4;
 
     var cleanup = schedule.scheduleJob(cleanup_rule, function() {
-      channel.bulkDelete(100);
+      channel.bulkDelete(100).then(console.log("Cleaned messages"));
   });
 }
