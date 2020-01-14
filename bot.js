@@ -95,7 +95,11 @@ function scheduleMessage(channel, dungeon, rule, status, timeout, image) {
     }
 
     var job = schedule.scheduleJob(rule, function () {
-        channel.send(dungeon + status + image).then(msg => if (timeout !== NDEF){msg.delete(timeout)});
+        channel.send(dungeon + status + image).then(function(msg) {
+            if(timeout !== NDEF) {
+                msg.delete(timeout)
+            }
+        });
     })
 }
 
