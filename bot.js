@@ -64,12 +64,12 @@ client.on('ready', () => {
     scheduleMessage(raidchannel, KOV_RAID, kov_rule1, RAID_STARTING, ONE_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, NDEF, KOV_IMG);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
-    scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END, FIVE_MIN);
+    scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END, NDEF);
 
     scheduleMessage(raidchannel, KOF_RAID, kof_rule1, RAID_STARTING, ONE_HOUR);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, KOF_IMG);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule3, RAID_ENDING, TWO_HOUR);
-    scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END, FIVE_MIN);
+    scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END, NDEF);
 
     clearMessages(raidchannel);
 });
