@@ -3,11 +3,13 @@ const client = new Discord.Client();
 const v8 = require('v8');
 const schedule = require('node-schedule-tz');
 const NDEF = -1;
+var raidchannel;
 
+//Automated Notification
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 
-    var raidchannel = client.channels.get(process.env.CHANNEL_ID);
+    raidchannel = client.channels.get(process.env.POST_CHANNEL_ID);
 
     const RAID_STARTING_H = 15; const RAID_START_H = 16; const RAID_ENDING_H = 0; const RAID_END_H = 2;
     const ONE_HOUR = 3600000; const TWO_HOUR = 7200000; const THIRTY_MIN = 1800000; const FIVE_MIN = 300000; const HALF_HOUR = 30;
@@ -74,6 +76,37 @@ client.on('ready', () => {
     clearMessages(raidchannel);
 });
 
+//Custom Notification
+client.on('message', function(message) {
+
+    if(message.channel.id === process.env.READ_CHANNEL_ID
+        && message.member.roles.has(process.env.ROLE_ID)
+        && message.content.startsWith("<@!" + client.user.id + ">")) {
+
+        var str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
+
+        if(str.startsWith('help')) {
+            raidchannel.send('Description: Sends your message at the time specified\nUsage: @mention <message> <time to notify in AM/PM>');
+        }
+        var hour = 0; var minute = 0;
+        if(str.endsWith("pm")) {
+            hour += 12;
+            str = str.replace("pm", "").trim();
+        }
+        else if (str.endsWith("am")) {
+            str = str.replace("am", "").trim();
+        }
+        else {
+            raidchannel.send("use AM/PM format eg. 4:30PM, 5.30AM, 08:30am")
+        }
+        var match = str.match(time_regex);
+        hour += parseInt(match[1]);
+        if(match[4] !== undefined) {minute = parseInt(match[4])};
+        str = str.replace(match[0], "").trim();
+        scheduleCustomNotify(raidchannel, str, hour, minute);
+    }
+});
+
 client.login(process.env.TOKEN);
 
 function setUpRulesHM(hours, min) {
@@ -112,4 +145,11 @@ function clearMessages(channel) {
     var cleanup = schedule.scheduleJob(cleanup_rule, function() {
       channel.bulkDelete(10).then(msg => console.log(`Cleaned ${msg.size} messages`));
   });
+}
+
+function scheduleCustomNotify(channel, content, h, m) {
+    //console.log(content + " " + h + " " + m);
+    var job = schedule.scheduleJob({hour: h, minute: m}, function () {
+        channel.send(content);
+    })
 }
