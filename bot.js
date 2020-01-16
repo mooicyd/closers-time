@@ -89,6 +89,7 @@ client.on('message', function(message) {
 
         if(str.startsWith('help')) {
             raidchannel.send('Description: Sends your message at the time specified\nUsage: @mention <message> <time to notify in AM/PM>');
+            return;
         }
         var hour = 0; var minute = 0;
         if(str.endsWith("pm")) {
@@ -154,4 +155,5 @@ function scheduleCustomNotify(channel, content, h, m) {
     var job = schedule.scheduleJob({hour: h, minute: m}, function () {
         channel.send(content);
     })
+    return job;
 }
