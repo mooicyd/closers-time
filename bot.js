@@ -74,11 +74,6 @@ client.on('ready', () => {
     clearMessages(raidchannel);
 });
 
-client.on('message', function(message) {
-    if(message.isMentioned(client.user) && message.member.roles.has(549882162309103627))
-
-});
-
 client.login(process.env.TOKEN);
 
 function setUpRulesHM(hours, min) {
