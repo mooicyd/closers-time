@@ -3,6 +3,8 @@ const client = new Discord.Client();
 const v8 = require('v8');
 const schedule = require('node-schedule-tz');
 const NDEF = -1;
+const time_regex = /([0-9]+)((:|.)([0-9]+))*/
+const time_delimit = /(:|.)/
 var raidchannel;
 
 //Automated Notification
