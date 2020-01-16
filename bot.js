@@ -74,6 +74,11 @@ client.on('ready', () => {
     clearMessages(raidchannel);
 });
 
+client.on('message', function(message) {
+    if(message.isMentioned(client.user) && message.member.roles.has(549882162309103627))
+
+});
+
 client.login(process.env.TOKEN);
 
 function setUpRulesHM(hours, min) {
@@ -110,6 +115,6 @@ function clearMessages(channel) {
     cleanup_rule.hour = 4;
 
     var cleanup = schedule.scheduleJob(cleanup_rule, function() {
-      channel.bulkDelete(100).then(msg => console.log(`Cleaned ${msg.size} messages`));
+      channel.bulkDelete(10).then(msg => console.log(`Cleaned ${msg.size} messages`));
   });
 }
