@@ -19,7 +19,8 @@ client.on('ready', () => {
     const KOV_RAID = "King of Voracity raid (LV87) "; const KOF_RAID = "King of Flies raid (LV85) "; const KOF_IMG = "\nhttps://imgur.com/PJVbqvz"; const KOV_IMG = "\nhttps://imgur.com/eVboHcQ";
     const RAID_STARTING = "will open in 1 hour. Get Ready!"; const RAID_START = "has opened. The raid will remain open for the next 10 hours."; const RAID_ENDING = "will end in 2 hours.";
     const RAID_END = "has ended."; const OVERFLOOD = "Overflood "; const OF_L_START = "has opened. The dungeon will remain open for 1 hour."; const OF_S_START = "has opened. The dungeon will remain open for 30 minutes.";
-    const OF_L_TIMES = [10, 15, 18, 20, 23]; const OF_S_TIMES = [0, 1]; const OF_IMG = "\nhttps://imgur.com/DrfvjPv";
+    const OF_L_TIMES = [10, 15, 18, 20, 23]; const OF_S_TIMES = [0, 1]; const OF_IMG = "\nhttps://imgur.com/DrfvjPv"; const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png";
+    const SEA_DAYS = [3,6,0]; const SEA_START = "is open for today. The dungeon will be closed when this message is deleted."; const YOD_SEA = "Yod Sea (LV 86) ";
 
     //King of Voracity Timers
     var kov_rule1 = new schedule.RecurrenceRule();
@@ -65,17 +66,26 @@ client.on('ready', () => {
         scheduleMessage(raidchannel, OVERFLOOD, rule, OF_S_START, THIRTY_MIN, OF_IMG);
     })
 
+    //King of Voracity
     scheduleMessage(raidchannel, KOV_RAID, kov_rule1, RAID_STARTING, ONE_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, NDEF, KOV_IMG);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END, NDEF);
 
+    //King of FLies
     scheduleMessage(raidchannel, KOF_RAID, kof_rule1, RAID_STARTING, ONE_HOUR);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, KOF_IMG);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END, NDEF);
 
     clearMessages(raidchannel);
+
+    //Yod Sea
+    var sea_rule = new schedule.RecurrenceRule();
+    sea_rule.minute = 0;
+    sea_rule.hour = 4;
+    sea_rule.dayOfWeek = SEA_DAYS;
+    scheduleMessage(raidchannel, YOD_SEA, sea_rule, SEA_START, NDEF, SEA_IMG);
 });
 
 //Custom Notification
