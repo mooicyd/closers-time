@@ -82,6 +82,7 @@ client.on('ready', () => {
 
     //Yod Sea
     var sea_rule = new schedule.RecurrenceRule();
+    sea_rule.second = 30;
     sea_rule.minute = 0;
     sea_rule.hour = 4;
     sea_rule.dayOfWeek = SEA_DAYS;
