@@ -5,6 +5,9 @@ const schedule = require('node-schedule-tz');
 const NDEF = -1;
 const time_regex = /([0-9]+)((:|.)([0-9]+))*/
 const time_delimit = /(:|.)/
+const {google} = require('googleapis');
+const sheets = google.sheets({version: 'v4'});
+
 var raidchannel;
 
 //Automated Notification
@@ -52,15 +55,15 @@ client.on('ready', () => {
     var kof_rule4 = v8.deserialize(v8.serialize(kof_rule3));
     kof_rule4.hour = RAID_END_H;
 
-    //King of Voracity
+    //Overflood timers
 
-    var ofLong = setUpRulesHM(OF_L_TIMES);
+    var ofLong = setUpRules(hours=OF_L_TIMES);
 
     ofLong.forEach(function(rule) {
         scheduleMessage(raidchannel, OVERFLOOD, rule, OF_L_START, ONE_HOUR, OF_IMG);
     })
 
-    var ofShort = setUpRulesHM(OF_S_TIMES, HALF_HOUR);
+    var ofShort = setUpRules(hours=OF_S_TIMES, min=HALF_HOUR);
 
     ofShort.forEach(function(rule) {
         scheduleMessage(raidchannel, OVERFLOOD, rule, OF_S_START, THIRTY_MIN, OF_IMG);
@@ -68,65 +71,102 @@ client.on('ready', () => {
 
     //King of Voracity
     scheduleMessage(raidchannel, KOV_RAID, kov_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, NDEF, KOV_IMG);
+    scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, image=KOV_IMG);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
-    scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END, NDEF);
+    scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END);
 
     //King of FLies
     scheduleMessage(raidchannel, KOF_RAID, kof_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, KOF_IMG);
+    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, image=OF_IMG);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule3, RAID_ENDING, TWO_HOUR);
-    scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END, NDEF);
+    scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END);
 
     clearMessages(raidchannel);
 
     //Yod Sea
     var sea_rule = new schedule.RecurrenceRule();
-    sea_rule.second = 30;
-    sea_rule.minute = 0;
+    sea_rule.minute = 1;
     sea_rule.hour = 4;
     sea_rule.dayOfWeek = SEA_DAYS;
-    scheduleMessage(raidchannel, YOD_SEA, sea_rule, SEA_START, NDEF, SEA_IMG);
+    scheduleMessage(raidchannel, YOD_SEA, sea_rule, SEA_START, image=SEA_IMG);
 });
 
 //Custom Notification
-client.on('message', function(message) {
+// client.on('message', function(message) {
+//
+//     if(message.channel.id === process.env.READ_CHANNEL_ID
+//         && message.member.roles.has(process.env.ROLE_ID)
+//         && message.content.startsWith("<@!" + client.user.id + ">")) {
+//
+//         var str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
+//
+//         if(str.startsWith('help')) {
+//             raidchannel.send('Description: Sends your message at the time specified\nUsage: @mention <message> <time to notify in AM/PM>');
+//             return;
+//         }
+//         var hour = 0; var minute = 0;
+//         if(str.endsWith("pm")) {
+//             hour += 12;
+//             str = str.replace("pm", "").trim();
+//         }
+//         else if (str.endsWith("am")) {
+//             str = str.replace("am", "").trim();
+//         }
+//         else {
+//             raidchannel.send("use AM/PM format eg. 4:30PM, 5.30AM, 08:30am")
+//         }
+//         var match = str.match(time_regex);
+//         hour += parseInt(match[1]);
+//         if(match[4] !== undefined) {minute = parseInt(match[4])};
+//         str = str.replace(match[0], "").trim();
+//         scheduleCustomNotify(raidchannel, str, hour, minute);
+//     }
+// });
 
-    if(message.channel.id === process.env.READ_CHANNEL_ID
-        && message.member.roles.has(process.env.ROLE_ID)
-        && message.content.startsWith("<@!" + client.user.id + ">")) {
+client.on('message', async function(message) {
+    if(message.channel.id === process.env.READ_CHANNEL_ID &&
+        message.content.startsWith("<@!" + client.user.id + ">")) {
+            var str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
+            client.channels.get(message.channel.id).send((await translate(str)));
+        }
 
-        var str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
-
-        if(str.startsWith('help')) {
-            raidchannel.send('Description: Sends your message at the time specified\nUsage: @mention <message> <time to notify in AM/PM>');
-            return;
-        }
-        var hour = 0; var minute = 0;
-        if(str.endsWith("pm")) {
-            hour += 12;
-            str = str.replace("pm", "").trim();
-        }
-        else if (str.endsWith("am")) {
-            str = str.replace("am", "").trim();
-        }
-        else {
-            raidchannel.send("use AM/PM format eg. 4:30PM, 5.30AM, 08:30am")
-        }
-        var match = str.match(time_regex);
-        hour += parseInt(match[1]);
-        if(match[4] !== undefined) {minute = parseInt(match[4])};
-        str = str.replace(match[0], "").trim();
-        scheduleCustomNotify(raidchannel, str, hour, minute);
-    }
 });
 
 client.login(process.env.TOKEN);
 
-function setUpRulesHM(hours, min) {
-    if(min === undefined) {
-        min = 0;
-    }
+async function translate(query) {
+    const params = {
+        spreadsheetId: process.env.SPREADSHEET_ID,
+        range: 'Sheet1',
+        majorDimension: 'ROWS',
+        valueRenderOption: 'FORMATTED_VALUE',
+        key: process.env.GOOGLE_API_KEY,
+    };
+
+    try {
+        var reply = "";
+        const response = (await sheets.spreadsheets.values.get(params)).data;
+        if(response == null) {
+            return "Unable to find spreadsheet or spreadsheet is empty";
+        }
+        var res_val = response["values"];
+        res_val.forEach(function(element) {
+            if(element[2].toLowerCase().includes(query.toLowerCase())) {
+                reply += `EN: ${element[0].padEnd(30)}| KR: ${element[1].padEnd(20)}| Aliases: ${element[2]}\n`;
+        }});
+        if(reply == "") {
+            reply = `No results found for "${query}"`;
+        } else {
+            reply = `Matching results for "${query}":\n${reply}`
+        }
+        return reply;
+    } catch (e) {
+        console.log(e);
+        return "Error occurred";
+    };
+}
+
+function setUpRules(days=undefined, hours, min=0) {
     var rules = new Array();
     hours.forEach(function(value) {
         var rule = new schedule.RecurrenceRule();
@@ -137,11 +177,7 @@ function setUpRulesHM(hours, min) {
     return rules;
 }
 
-function scheduleMessage(channel, dungeon, rule, status, timeout, image) {
-    if(image === undefined) {
-        image = "";
-    }
-
+function scheduleMessage(channel, dungeon, rule, status, timeout=NDEF, image="") {
     var job = schedule.scheduleJob(rule, function () {
         channel.send(dungeon + status + image).then(function(msg) {
             if(timeout !== NDEF) {
@@ -162,7 +198,6 @@ function clearMessages(channel) {
 }
 
 function scheduleCustomNotify(channel, content, h, m) {
-    //console.log(content + " " + h + " " + m);
     var job = schedule.scheduleJob({hour: h, minute: m}, function () {
         channel.send(content);
     })
