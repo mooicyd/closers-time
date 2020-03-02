@@ -135,6 +135,9 @@ client.on('message', async function(message) {
 client.login(process.env.TOKEN);
 
 async function translate(query) {
+    if(query.length < 3) {
+        return "You may view the spreadsheet for the list of items and aliases: <https://docs.google.com/spreadsheets/d/1iLTnTcC_xJ2WfTonqusuQkCIvQsUm2GNpsxoPQ5JzDQ/edit#gid=0>"
+    }
     const params = {
         spreadsheetId: process.env.SPREADSHEET_ID,
         range: 'Sheet1',
