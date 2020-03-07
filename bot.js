@@ -185,7 +185,7 @@ async function translate(query, channelId) {
     };
 }
 
-function setUpRules(days=undefined, hours, min=0) {
+function setUpRules(hours, min=0) {
     var rules = new Array();
     hours.forEach(function(value) {
         var rule = new schedule.RecurrenceRule();
