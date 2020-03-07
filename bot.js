@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const {Client, RichEmbed} = require('discord.js');
+const client = new Client();
 const v8 = require('v8');
 const schedule = require('node-schedule-tz');
 const NDEF = -1;
@@ -127,16 +127,22 @@ client.on('message', async function(message) {
     if(message.channel.id === process.env.READ_CHANNEL_ID &&
         message.content.startsWith("<@!" + client.user.id + ">")) {
             var str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
-            client.channels.get(message.channel.id).send((await translate(str)));
+            // client.channels.get(message.channel.id).send((await translate(str)));
+            await translate(str, message.channel.id)
         }
 
 });
 
 client.login(process.env.TOKEN);
 
-async function translate(query) {
-    if(query.length < 3) {
-        return "You may view the spreadsheet for the list of items and aliases: <https://docs.google.com/spreadsheets/d/1iLTnTcC_xJ2WfTonqusuQkCIvQsUm2GNpsxoPQ5JzDQ/edit#gid=0>"
+async function translate(query, channelId) {
+    var channel = client.channels.get(channelId);
+    const sheetUrl = "<https://docs.google.com/spreadsheets/d/1iLTnTcC_xJ2WfTonqusuQkCIvQsUm2GNpsxoPQ5JzDQ/edit#gid=0>";
+    var results = [];
+
+    if(query.length < 3 || query == "help") {
+        await channel.send(`You may view the spreadsheet for the list of items and aliases: ${sheetUrl}`);
+        return;
     }
     const params = {
         spreadsheetId: process.env.SPREADSHEET_ID,
@@ -147,25 +153,35 @@ async function translate(query) {
     };
 
     try {
-        var reply = "";
         const response = (await sheets.spreadsheets.values.get(params)).data;
         if(response == null) {
-            return "Unable to find spreadsheet or spreadsheet is empty";
+            await channel.send("Unable to find spreadsheet or spreadsheet is empty");
+            return;
         }
         var res_val = response["values"];
         res_val.forEach(function(element) {
-            if(element[2].toLowerCase().includes(query.toLowerCase())) {
-                reply += `EN: ${element[0].padEnd(30)}| KR: ${element[1].padEnd(20)}| Aliases: ${element[2]}\n`;
+            if(element[3].toLowerCase().includes(query.toLowerCase())) {
+                var embed = new RichEmbed()
+                .setTitle(element[1])
+                .setThumbnail(element[4])
+                // .setDescription(element[4])
+                .addField("Hangul", element[2])
+                .addField("Alias(es)", element[3]);
+                results.push(embed);
+                // reply += `EN: ${element[0].padEnd(30)}| KR: ${element[1].padEnd(20)}| Aliases: ${element[2]}\n`;
         }});
-        if(reply == "") {
-            reply = `No results found for "${query}"`;
+        if(results.length == 0) {
+            await channel.send(`No results found for "${query}"`);
+            return;
         } else {
-            reply = `Matching results for "${query}":\n${reply}`
+            await channel.send(`Matching results for "${query}":`);
+            while(results.length > 0) {
+                await channel.send(results.pop());
+            }
+            return;
         }
-        return reply;
     } catch (e) {
         console.log(e);
-        return "Error occurred";
     };
 }
 
