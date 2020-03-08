@@ -71,13 +71,13 @@ client.on('ready', () => {
 
     //King of Voracity
     scheduleMessage(raidchannel, KOV_RAID, kov_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, image=KOV_IMG);
+    scheduleMessage(raidchannel, KOV_RAID, kov_rule2, RAID_START, NDEF, KOV_IMG);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END);
 
     //King of FLies
     scheduleMessage(raidchannel, KOF_RAID, kof_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, image=OF_IMG);
+    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, OF_IMG);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END);
 
@@ -88,7 +88,7 @@ client.on('ready', () => {
     sea_rule.minute = 1;
     sea_rule.hour = 4;
     sea_rule.dayOfWeek = SEA_DAYS;
-    scheduleMessage(raidchannel, YOD_SEA, sea_rule, SEA_START, image=SEA_IMG);
+    scheduleMessage(raidchannel, YOD_SEA, sea_rule, SEA_START, NDEF, SEA_IMG);
 });
 
 //Custom Notification
