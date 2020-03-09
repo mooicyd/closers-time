@@ -75,9 +75,9 @@ client.on('ready', () => {
     scheduleMessage(raidchannel, KOV_RAID, kov_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOV_RAID, kov_rule4, RAID_END);
 
-    //King of FLies
+    //King of Flies
     scheduleMessage(raidchannel, KOF_RAID, kof_rule1, RAID_STARTING, ONE_HOUR);
-    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, OF_IMG);
+    scheduleMessage(raidchannel, KOF_RAID, kof_rule2, RAID_START, NDEF, KOF_IMG);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule3, RAID_ENDING, TWO_HOUR);
     scheduleMessage(raidchannel, KOF_RAID, kof_rule4, RAID_END);
 
@@ -167,6 +167,9 @@ async function translate(query, channelId) {
                 // .setDescription(element[4])
                 .addField("Hangul", element[2])
                 .addField("Alias(es)", element[3]);
+                if(element[4]) {
+                    embed.addField("Notes", element[4]);
+                }
                 results.push(embed);
                 // reply += `EN: ${element[0].padEnd(30)}| KR: ${element[1].padEnd(20)}| Aliases: ${element[2]}\n`;
         }});
