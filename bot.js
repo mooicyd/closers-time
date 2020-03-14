@@ -167,8 +167,8 @@ async function translate(query, channelId) {
                 // .setDescription(element[4])
                 .addField("Hangul", element[2])
                 .addField("Alias(es)", element[3]);
-                if(element[4]) {
-                    embed.addField("Notes", element[4]);
+                if(element[5]) {
+                    embed.addField("Notes", element[5]);
                 }
                 results.push(embed);
                 // reply += `EN: ${element[0].padEnd(30)}| KR: ${element[1].padEnd(20)}| Aliases: ${element[2]}\n`;
