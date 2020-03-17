@@ -23,9 +23,8 @@ client.on('ready', () => {
     const RAID_STARTING = "will open in 1 hour. Get Ready!"; const RAID_START = "has opened. The raid will remain open for the next 10 hours."; const RAID_ENDING = "will end in 2 hours.";
     const RAID_END = "has ended."; const OVERFLOOD = "Overflood "; const OF_L_START = "has opened. The dungeon will remain open for 1 hour."; const OF_S_START = "has opened. The dungeon will remain open for 30 minutes.";
     const OF_L_TIMES = [10, 15, 18, 20, 23]; const OF_S_TIMES = [0, 1]; const OF_IMG = "\nhttps://imgur.com/DrfvjPv"; const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png";
-    const SEA_DAYS = [3,6,0]; const SEA_START = "is open for today. The dungeon will be closed when this message is deleted."; const YOD_SEA = "Yod Sea (LV 86) ";
+    const SEA_DAYS = [3,6,0]; const SEA_START = "is open for today. The dungeon will be closed when this message is deleted."; const YOD_SEA = "Yod Sea (LV86) "; const WILL_OPEN = " will open today in 12 hours."
 
-    //King of Voracity Timers
     var kov_rule1 = new schedule.RecurrenceRule();
     kov_rule1.minute = 0;
     kov_rule1.hour = RAID_STARTING_H;
@@ -56,7 +55,6 @@ client.on('ready', () => {
     kof_rule4.hour = RAID_END_H;
 
     //Overflood timers
-
     var ofLong = setUpRules(hours=OF_L_TIMES);
 
     ofLong.forEach(function(rule) {
@@ -89,6 +87,20 @@ client.on('ready', () => {
     sea_rule.hour = 4;
     sea_rule.dayOfWeek = SEA_DAYS;
     scheduleMessage(raidchannel, YOD_SEA, sea_rule, SEA_START, NDEF, SEA_IMG);
+
+    //KoF day
+    var kof_day_rule = new schedule.RecurrenceRule();
+    kof_day_rule.minute = 1;
+    kof_day_rule.hour = 4;
+    kof_day_rule.dayOfWeek = KOF_DAYS;
+    scheduleMessage(raidchannel, KOF_RAID, kof_day_rule, WILL_OPEN, NDEF, KOF_IMG);
+
+    //KoV day
+    var kov_day_rule = new schedule.RecurrenceRule();
+    kov_day_rule.minute = 1;
+    kov_day_rule.hour = 4;
+    kov_day_rule.dayOfWeek = KOV_DAYS;
+    scheduleMessage(raidchannel, KOV_RAID, kov_day_rule, WILL_OPEN, NDEF, KOV_IMG);
 });
 
 //Custom Notification
@@ -164,14 +176,12 @@ async function translate(query, channelId) {
                 var embed = new RichEmbed()
                 .setTitle(element[1])
                 .setThumbnail(element[4])
-                // .setDescription(element[4])
                 .addField("Hangul", element[2])
                 .addField("Alias(es)", element[3]);
                 if(element[5]) {
                     embed.addField("Notes", element[5]);
                 }
                 results.push(embed);
-                // reply += `EN: ${element[0].padEnd(30)}| KR: ${element[1].padEnd(20)}| Aliases: ${element[2]}\n`;
         }});
         if(results.length == 0) {
             await channel.send(`No results found for "${query}"`);
@@ -201,6 +211,7 @@ function setUpRules(hours, min=0) {
 
 function scheduleMessage(channel, dungeon, rule, status, timeout=NDEF, image="") {
     var job = schedule.scheduleJob(rule, function () {
+        console.log(dungeon + status);
         channel.send(dungeon + status + image).then(function(msg) {
             if(timeout !== NDEF) {
                 msg.delete(timeout)
