@@ -167,7 +167,7 @@ async function translate(query, channelId) {
     try {
         const response = (await sheets.spreadsheets.values.get(params)).data;
         if(response == null) {
-            await channel.send("Unable to find spreadsheet or spreadsheet is empty");
+            await channel.send(`Unable to find spreadsheet or spreadsheet is empty, you may access the sheet at ${sheetUrl}`);
             return;
         }
         var res_val = response["values"];
@@ -184,7 +184,7 @@ async function translate(query, channelId) {
                 results.push(embed);
         }});
         if(results.length == 0) {
-            await channel.send(`No results found for "${query}"`);
+            await channel.send(`No results found for "${query}", you may verify if the alias is found in ${sheetUrl}`);
             return;
         } else {
             await channel.send(`Matching results for "${query}":`);
