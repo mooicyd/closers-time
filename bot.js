@@ -214,7 +214,7 @@ function setUpRules(obj) {
     var rules = new Array();
     obj.hours.forEach(function(value) {
         var rule = new schedule.RecurrenceRule();
-        rule.minute = ((obj.min)? min: 0);
+        rule.minute = ((obj.min)? obj.min: 0);
         rule.hour = value;
         rules.push(rule);
     });
