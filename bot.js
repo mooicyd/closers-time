@@ -14,7 +14,7 @@ const KOV_RAID = "King of Voracity raid (LV87) "; const KOF_RAID = "King of Flie
 const RAID_STARTING = "will open in 1 hour. Get Ready!"; const RAID_START = "has opened. The raid will remain open for the next 10 hours."; const RAID_ENDING = "will end in 2 hours.";
 const RAID_END = "has ended."; const OVERFLOOD = "Overflood "; const OF_L_START = "has opened. The dungeon will remain open for 1 hour."; const OF_S_START = "has opened. The dungeon will remain open for 30 minutes.";
 const OF_L_TIMES = [10, 15, 18, 20, 23]; const OF_S_TIMES = [0, 1]; const OF_IMG = "\nhttps://imgur.com/DrfvjPv"; const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png";
-const SEA_DAYS = [3,6,0]; const SEA_START = "is open for today. The dungeon will be closed when this message is deleted."; const YOD_SEA = "Yod Sea (LV86) "; const WILL_OPEN = " will open today in 12 hours."
+const SEA_DAYS = [3,6,0]; const SEA_START = "is open for today."; const YOD_SEA = "Yod Sea (LV86) "; const WILL_OPEN = " will open today in 12 hours."
 
 var raidchannel;
 
