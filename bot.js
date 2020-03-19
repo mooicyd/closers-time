@@ -226,7 +226,7 @@ function scheduleMessage(message) {
         console.log(message.dungeon + message.status);
         message.channel.send(`${message.dungeon}${message.status}${(message.img?message.img:"")}`).then(function(msg) {
             if(message.timeout) {
-                msg.delete(timeout);
+                msg.delete(message.timeout);
             }
         });
     })
