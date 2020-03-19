@@ -224,7 +224,7 @@ function setUpRules(obj) {
 function scheduleMessage(message) {
     var job = schedule.scheduleJob(message.rule, function () {
         console.log(message.dungeon + message.status);
-        channel.send(`${message.dungeon}${message.status}${(message.image?message.image:"")}`).then(function(msg) {
+        message.channel.send(`${message.dungeon}${message.status}${(message.image?message.image:"")}`).then(function(msg) {
             if(message.timeout) {
                 msg.delete(timeout);
             }
