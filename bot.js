@@ -72,7 +72,7 @@ client.on('ready', () => {
     let kov_starting = { channel: raidchannel, dungeon: KOV_RAID, rule: kovStartingRule, status: RAID_STARTING, timeout: ONE_HOUR};
     let kov_start = { channel: raidchannel, dungeon: KOV_RAID, rule: kovStartRule, status: RAID_START, img: KOV_IMG};
     let kov_ending = { channel: raidchannel, dungeon: KOV_RAID, rule: kovEndingRule, status: RAID_ENDING, timeout: TWO_HOUR, img: KOV_IMG};
-    let kov_end = { channel: raidchannel, dungeon: KOV_RAID, rule: kovEndingRule, status: RAID_END};
+    let kov_end = { channel: raidchannel, dungeon: KOV_RAID, rule: kovEndRule, status: RAID_END};
 
     scheduleMessage(kov_starting);
     scheduleMessage(kov_start);
@@ -83,7 +83,7 @@ client.on('ready', () => {
     let kof_starting = { channel: raidchannel, dungeon: KOF_RAID, rule: kofStartingRule, status: RAID_STARTING, timeout: ONE_HOUR};
     let kof_start = { channel: raidchannel, dungeon: KOF_RAID, rule: kofStartRule, status: RAID_START, img: KOF_IMG};
     let kof_ending = { channel: raidchannel, dungeon: KOF_RAID, rule: kofEndingRule, status: RAID_ENDING, timeout: TWO_HOUR, img: KOF_IMG};
-    let kof_end = { channel: raidchannel, dungeon: KOF_RAID, rule: kofEndingRule, status: RAID_END};
+    let kof_end = { channel: raidchannel, dungeon: KOF_RAID, rule: kofEndRule, status: RAID_END};
 
     scheduleMessage(kof_starting);
     scheduleMessage(kof_start);
@@ -212,10 +212,10 @@ async function translate(query, channelId) {
 
 function setUpRules(obj) {
     let rules = new Array();
-    obj.hours.forEach(function(value) {
+    obj.hours.forEach(function(hour) {
         let rule = new schedule.RecurrenceRule();
         rule.minute = ((obj.min)? obj.min: 0);
-        rule.hour = value;
+        rule.hour = hour;
         rules.push(rule);
     });
     return rules;
