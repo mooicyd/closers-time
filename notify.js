@@ -24,7 +24,7 @@ const SEA_DAYS = [3,6,0];
 
 exports.setupSchedule = function(raidchannel) {
     let kovStartingRule = new schedule.RecurrenceRule();
-    kovStartingRule.minute = 16;
+    kovStartingRule.minute = 0;
     kovStartingRule.hour = RAID_STARTING_H;
     kovStartingRule.dayOfWeek = KOV_DAYS;
 
