@@ -22,7 +22,7 @@ const SEA_START = "is open for today.";
 const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png";
 const SEA_DAYS = [3,6,0];
 
-exports.setupSchedule = function(raidchannel) {
+function setupSchedule(raidchannel) {
     let kovStartingRule = new schedule.RecurrenceRule();
     kovStartingRule.minute = 0;
     kovStartingRule.hour = RAID_STARTING_H;
@@ -53,14 +53,14 @@ exports.setupSchedule = function(raidchannel) {
     kofEndRule.hour = RAID_END_H;
 
     //Overflood timers
-    let ofLong = setUpRules({hours: OF_L_TIMES});
+    let ofLong = setupRules({hours: OF_L_TIMES});
 
     ofLong.forEach(function(rule) {
         let messageObj = { channel: raidchannel, dungeon: OVERFLOOD, rule: rule, status: OF_L_START, timeout: ONE_HOUR, img: OF_IMG};
         scheduleMessage(messageObj);
     })
 
-    let ofShort = setUpRules({hours: OF_S_TIMES, min: HALF_HOUR});
+    let ofShort = setupRules({hours: OF_S_TIMES, min: HALF_HOUR});
 
     ofShort.forEach(function(rule) {
         let messageObj = { channel: raidchannel, dungeon: OVERFLOOD, rule: rule, status: OF_S_START, timeout: THIRTY_MIN, img: OF_IMG};
@@ -116,10 +116,6 @@ exports.setupSchedule = function(raidchannel) {
     scheduleMessage(kov_days);
 }
 
-exports.cleanMessages = function(channel) {
-    channel.bulkDelete(10).then(msg => console.log(`Cleaned ${msg.size} messages`));
-}
-
 function copy(obj) {
     return v8.deserialize(v8.serialize(obj));
 }
@@ -141,10 +137,10 @@ function createMessage(message) {
 
 function scheduleMessage(message) {
     let job = schedule.scheduleJob(message.rule, () => sendMessage(message))
-    return job != undefined;
+    return job;
 }
 
-function setUpRules(obj) {
+function setupRules(obj) {
     let rules = new Array();
     obj.hours.forEach(function(hour) {
         let rule = new schedule.RecurrenceRule();
@@ -171,6 +167,13 @@ function scheduleCustomNotify(channel, content, h, m) {
     })
     return job;
 }
+
+//Public API
+module.exports.setupRules = setupRules;
+module.exports.scheduleMessage = scheduleMessage;
+module.exports.createMessage = createMessage;
+module.exports.setupSchedule = setupSchedule;
+
 
 //Custom Notification
 // client.on('message', function(message) {
