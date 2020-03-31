@@ -4,6 +4,7 @@ const client = new Client();
 const translator = require('./translate')
 const help = require('./help')
 const info = require('./info')
+const space_delimit = /\s+/
 
 let raidchannel;
 
@@ -21,21 +22,22 @@ client.on('message', async function(message) {
             let messages = [];
             let str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
             let channel = client.channels.get(message.channel.id);
-            if(str.startsWith("find")) {
-                str = str.replace("find", "").trim();
-                messages = await translator.translate(str);
-            }
-            else if(str.startsWith("info")) {
-                str = str.replace("info", "").trim();
-                messages = info.info(str);
-            }
-            else if(str.startsWith("help")) {
-                str = str.replace("help", "").trim();
-                messages = help.help(str);
-            }
-            else {
-                messages = help.help("");
-                messages.unshift("No such command, below are the available commands");
+            let command = str.split(space_delimit)[0];
+            switch(command) {
+                case 'find':
+                    str = str.replace("find", "").trim();
+                    messages.push(await translator.translate(str));
+                    break;
+                case 'info':
+                    str = str.replace("info", "").trim();
+                    messages.push(info.info(str));
+                    break;
+                default:
+                    messages.push("No such command, below are the available commands");
+                case 'help':
+                    str = str.replace("help", "").trim();
+                    messages.push(help.help(str));
+                    break;
             }
             messages.forEach((msg) => channel.send(msg));
         }
