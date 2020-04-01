@@ -11,7 +11,7 @@ let raidchannel;
 //Automated Notification
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
-    client.user.setActivity("@mention help", {type: 'WATCHING'})
+    client.user.setActivity(`@Closers Bot help`, {type: 'WATCHING'})
     raidchannel = client.channels.get(process.env.POST_CHANNEL_ID)
     notify.setupSchedule(raidchannel)
 });
