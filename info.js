@@ -3,7 +3,7 @@ function info(str) {
     let messages = [];
     switch(str) {
         case "help":
-            messages.push(`Format for info: @mention info [optional: guide]\nCurrent guides: skill, raid`);
+            messages.push(`Format for info: @Closers Bot#4086 info [optional: guide]\nCurrent guides: skill, raid`);
             break;
         case "skill":
             messages.push(`Skill Translation Guide: <https://docs.google.com/spreadsheets/d/1cOUORamDi90a5BqHXcHvfbWfMK48fvfWuRIegbqxVO0/>`);

@@ -7,7 +7,7 @@ exports.translate = async function(query) {
     let results = [];
 
     if(query.length < 3 || query == "help") {
-        return [`You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @mention find <part of item name/alias>`];
+        return [`You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @Closers Bot#4086 find <part of item name/alias>`];
     }
     const params = {
         spreadsheetId: process.env.SPREADSHEET_ID,
