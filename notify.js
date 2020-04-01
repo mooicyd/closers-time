@@ -121,12 +121,12 @@ function copy(obj) {
 }
 
 function sendMessage(message) {
-    console.log(`Message sent: ${message.dungeon}${message.status}`);
     message.channel.send(createMessage(message)).then(function(notif) {
         if(message.timeout) {
             notif.delete(message.timeout);
         }
     });
+    console.log(`Message sent: ${message.dungeon}${message.status}`);
     return true;
 }
 
