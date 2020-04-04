@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const {RichEmbed} = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 const sheets = google.sheets({version: 'v4'});
 
 exports.translate = async function(query) {
@@ -26,7 +26,7 @@ exports.translate = async function(query) {
         let res_val = response["values"]
         res_val.forEach(function(element) {
             if(element[3].toLowerCase().includes(query.toLowerCase())) {
-                let embed = new RichEmbed()
+                let embed = new MessageEmbed()
                 .setTitle(element[1])
                 .setThumbnail(element[4])
                 .addField("Hangul", element[2])

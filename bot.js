@@ -12,7 +12,7 @@ let raidchannel;
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`)
     client.user.setActivity(`@Closers Bot help`, {type: 'WATCHING'})
-    raidchannel = client.channels.get(process.env.POST_CHANNEL_ID)
+    raidchannel = client.channels.fetch(process.env.POST_CHANNEL_ID)
     notify.setupSchedule(raidchannel)
 });
 
@@ -21,22 +21,22 @@ client.on('message', async function(message) {
         message.content.startsWith("<@!" + client.user.id + ">")) {
             let messages = [];
             let str = message.content.toLowerCase().replace("<@!" + client.user.id + ">", "").trim();
-            let channel = client.channels.get(message.channel.id);
+            let channel = await client.channels.fetch(message.channel.id);
             let command = str.split(space_delimit)[0];
             switch(command) {
                 case 'find':
                     str = str.replace("find", "").trim();
-                    messages.push(await translator.translate(str));
+                    messages = await translator.translate(str);
                     break;
                 case 'info':
                     str = str.replace("info", "").trim();
-                    messages.push(info.info(str));
+                    messages = info.info(str);
                     break;
                 default:
                     messages.push("No such command, below are the available commands");
                 case 'help':
                     str = str.replace("help", "").trim();
-                    messages.push(help.help(str));
+                    messages = help.help(str);
                     break;
             }
             messages.forEach((msg) => channel.send(msg));
