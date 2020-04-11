@@ -9,10 +9,10 @@ const space_delimit = /\s+/
 let raidchannel;
 
 //Automated Notification
-client.on('ready', () => {
+client.on('ready', async () => {
     console.log(`Logged in as ${client.user.tag}!`)
     client.user.setActivity(`@Closers Bot help`, {type: 'WATCHING'})
-    raidchannel = client.channels.fetch(process.env.POST_CHANNEL_ID)
+    raidchannel = await client.channels.fetch(process.env.POST_CHANNEL_ID)
     notify.setupSchedule(raidchannel)
 });
 
