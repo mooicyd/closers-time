@@ -123,7 +123,7 @@ function copy(obj) {
 function sendMessage(message) {
     message.channel.send(createMessage(message)).then(function(notif) {
         if(message.timeout) {
-            notif.delete(message.timeout);
+            notif.delete({ timeout: message.timeout});
         }
     });
     console.log(`Message sent: ${message.dungeon}${message.status}`);
