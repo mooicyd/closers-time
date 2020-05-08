@@ -3,7 +3,7 @@ function help(str) {
     case "find":
       console.log("Printing find help");
       return [
-        `Format for searching item: @Closers Bot#4086 find <part of item name/alias>\nUse @mention find help for more details`,
+        `Format for searching item: @Closers Bot#4086 find [optional: categoryName] <part of item name/alias>\nUse @mention find help for more details`,
       ];
     case "info":
       console.log("Printing info help");

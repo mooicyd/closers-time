@@ -22,7 +22,7 @@ exports.translate = async function (queryCommand) {
 
   if (queryCommand.length < 3 || queryCommand.startsWith("help")) {
     return [
-      `You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @Closers Bot#4086 find <part of item name/alias>`,
+      `You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @Closers Bot#4086 find [category] <part of item name/alias>\nCategory defaults to "All" if there is no category`,
     ];
   }
 
