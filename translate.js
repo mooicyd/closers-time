@@ -38,8 +38,6 @@ exports.translate = async function (queryCommand) {
     query = queryCommand;
   }
 
-  console.log(category);
-  console.log(query);
   const params = {
     spreadsheetId: process.env.SPREADSHEET_ID,
     range: category,
@@ -89,6 +87,6 @@ exports.translate = async function (queryCommand) {
   }
 };
 
-function capitaliseFirstLetter(first, ...rest) {
-  return [first.toUpperCase, ...rest].join("");
+function capitaliseFirstLetter([first, ...rest]) {
+  return [first.toUpperCase(), ...rest].join("");
 }
