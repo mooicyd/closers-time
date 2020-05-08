@@ -28,13 +28,13 @@ exports.translate = async function (queryCommand) {
   }
 
   let spaceIndex = queryCommand.indexOf(" ");
-  let category = queryCommand.substring(0, spaceIndex).toUpperCase();
+  let category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex));
   let query = "";
   if (categories.includes(category)) {
     query = queryCommand.substring(spaceIndex + 1);
     console.log(query);
   } else {
-    category = "ALL";
+    category = "All";
     query = queryCommand;
   }
 
@@ -66,6 +66,9 @@ exports.translate = async function (queryCommand) {
           .setThumbnail(element[4])
           .addField("Hangul", element[2])
           .addField("Alias(es)", element[3]);
+        if (element[6]) {
+          embed.addField("Category", element[6]);
+        }
         if (element[5]) {
           embed.addField("Notes", element[5]);
         }
@@ -85,3 +88,7 @@ exports.translate = async function (queryCommand) {
     console.log(e);
   }
 };
+
+function capitaliseFirstLetter(first, ...rest) {
+  return [first.toUpperCase, ...rest].join("");
+}
