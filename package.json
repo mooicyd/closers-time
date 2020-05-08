@@ -6,7 +6,7 @@
     "node": "13.x"
   },
   "scripts": {
-    "test": "mocha ./test/test-notify.js"
+    "test": "mocha D:/projects/Closers-Time/test/test-notify.js"
   },
   "main": "index.js",
   "keywords": [],

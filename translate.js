@@ -15,10 +15,11 @@ exports.translate = async function (queryCommand) {
   }
 
   let spaceIndex = queryCommand.indexOf(" ");
-  let category = queryCommand.substring(0, spaceIndex);
+  let category = queryCommand.substring(0, spaceIndex).toLowerCase();
   let query = "";
   if (categories.includes(category)) {
     query = queryCommand.substring(spaceIndex + 1);
+    console.log(query);
   } else {
     category = "All";
     query = queryCommand;
