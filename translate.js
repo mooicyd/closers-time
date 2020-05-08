@@ -1,19 +1,15 @@
 const { google } = require("googleapis");
 const { MessageEmbed } = require("discord.js");
 const sheets = google.sheets({ version: "v4" });
+const schedule = require("node-schedule-tz");
 const categories = [];
 
 exports.setup = async function () {
-  let params = {
-    spreadsheetId: process.env.SPREADSHEET_ID,
-    key: process.env.GOOGLE_API_KEY,
-  };
-
-  let response = (await sheets.spreadsheets.get(params)).data;
-  response.sheets.forEach((element) =>
-    categories.push(element.properties.title)
-  );
+  categories = await getCategories();
   console.log(categories);
+  let updateCategories = new schedule.scheduleJob("*/5 * * * *", function () {
+    categories = getCategories();
+  });
 };
 
 exports.translate = async function (queryCommand) {
@@ -89,4 +85,17 @@ exports.translate = async function (queryCommand) {
 
 function capitaliseFirstLetter([first, ...rest]) {
   return [first.toUpperCase(), ...rest].join("");
+}
+
+async function getCategories() {
+  let params = {
+    spreadsheetId: process.env.SPREADSHEET_ID,
+    key: process.env.GOOGLE_API_KEY,
+  };
+  let categoryArr = [];
+  let response = (await sheets.spreadsheets.get(params)).data;
+  response.sheets.forEach((element) =>
+    categoryArr.push(element.properties.title)
+  );
+  return categoryArr;
 }
