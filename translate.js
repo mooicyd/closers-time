@@ -1,7 +1,19 @@
 const { google } = require("googleapis");
 const { MessageEmbed } = require("discord.js");
 const sheets = google.sheets({ version: "v4" });
-const categories = ["All", "Consumables", "Materials"];
+const categories = [];
+
+exports.setup = async function () {
+  let params = {
+    spreadsheetId: process.env.SPREADSHEET_ID,
+    key: process.env.GOOGLE_API_KEY,
+  };
+
+  let response = (await sheets.spreadsheets.get(params)).data;
+  response.sheets.forEach((element) =>
+    categories.push(element.properties.title)
+  );
+};
 
 exports.translate = async function (queryCommand) {
   const sheetUrl =

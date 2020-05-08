@@ -14,6 +14,7 @@ client.on("ready", async () => {
   client.user.setActivity(`@Closers Bot help`, { type: "WATCHING" });
   raidchannel = await client.channels.fetch(process.env.POST_CHANNEL_ID);
   notify.setupSchedule(raidchannel);
+  translator.setup();
 });
 
 client.on("message", async function (message) {
