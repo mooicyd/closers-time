@@ -13,6 +13,7 @@ exports.setup = async function () {
   response.sheets.forEach((element) =>
     categories.push(element.properties.title)
   );
+  console.log(categories);
 };
 
 exports.translate = async function (queryCommand) {
@@ -27,7 +28,7 @@ exports.translate = async function (queryCommand) {
   }
 
   let spaceIndex = queryCommand.indexOf(" ");
-  let category = queryCommand.substring(0, spaceIndex).toLowerCase();
+  let category = queryCommand.substring(0, spaceIndex).toUpperCase();
   let query = "";
   if (categories.includes(category)) {
     query = queryCommand.substring(spaceIndex + 1);
@@ -37,6 +38,8 @@ exports.translate = async function (queryCommand) {
     query = queryCommand;
   }
 
+  console.log(category);
+  console.log(query);
   const params = {
     spreadsheetId: process.env.SPREADSHEET_ID,
     range: category,
