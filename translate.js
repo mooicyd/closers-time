@@ -34,7 +34,7 @@ exports.translate = async function (queryCommand) {
     query = queryCommand.substring(spaceIndex + 1);
     console.log(query);
   } else {
-    category = "All";
+    category = "ALL";
     query = queryCommand;
   }
 
