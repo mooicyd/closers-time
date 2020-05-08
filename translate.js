@@ -1,20 +1,32 @@
 const { google } = require("googleapis");
 const { MessageEmbed } = require("discord.js");
 const sheets = google.sheets({ version: "v4" });
+const categories = ["All", "Consumables", "Materials"];
 
-exports.translate = async function (query) {
+exports.translate = async function (queryCommand) {
   const sheetUrl =
     "<https://docs.google.com/spreadsheets/d/1iLTnTcC_xJ2WfTonqusuQkCIvQsUm2GNpsxoPQ5JzDQ/edit#gid=0>";
   let results = [];
 
-  if (query.length < 3 || query == "help") {
+  if (queryCommand.length < 3 || queryCommand.startsWith("help")) {
     return [
       `You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @Closers Bot#4086 find <part of item name/alias>`,
     ];
   }
+
+  let spaceIndex = queryCommand.indexOf(" ");
+  let category = queryCommand.substring(0, spaceIndex);
+  let query = "";
+  if (categories.includes(category)) {
+    query = queryCommand.substring(spaceIndex + 1);
+  } else {
+    category = "All";
+    query = queryCommand;
+  }
+
   const params = {
     spreadsheetId: process.env.SPREADSHEET_ID,
-    range: "Sheet1",
+    range: category,
     majorDimension: "ROWS",
     valueRenderOption: "FORMATTED_VALUE",
     key: process.env.GOOGLE_API_KEY,
@@ -30,7 +42,9 @@ exports.translate = async function (query) {
 
     let res_val = response["values"];
     res_val.forEach(function (element) {
-      if (element[3].toLowerCase().includes(query.toLowerCase())) {
+      if (element.length === 0) {
+        //skip
+      } else if (element[3].toLowerCase().includes(query.toLowerCase())) {
         let embed = new MessageEmbed()
           .setTitle(element[1])
           .setThumbnail(element[4])
@@ -42,12 +56,13 @@ exports.translate = async function (query) {
         results.push(embed);
       }
     });
+
     if (results.length == 0) {
       return [
-        `No results found for "${query}", you may verify if the alias is found in ${sheetUrl}`,
+        `No results found for "${query}" under "${category}", you may verify if the alias is found in ${sheetUrl}`,
       ];
     } else {
-      results.unshift(`Matching results for "${query}":`);
+      results.unshift(`Matching results for "${query}" under "${category}":`);
       return results;
     }
   } catch (e) {
