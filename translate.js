@@ -22,9 +22,16 @@ exports.translate = async function (queryCommand) {
       `You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @Closers Bot#4086 find [category] <part of item name/alias>\nCategory defaults to "All" if there is no category`,
     ];
   }
-
+  let category = "";
   let spaceIndex = queryCommand.indexOf(" ");
-  let category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex));
+
+  if (spaceIndex < 0) {
+    //assume no category input
+    category = "";
+  } else {
+    category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex));
+  }
+
   let query = "";
   if (categories.includes(category)) {
     query = queryCommand.substring(spaceIndex + 1);
