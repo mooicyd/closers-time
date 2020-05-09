@@ -7,9 +7,12 @@ let categories = [];
 exports.setup = async function () {
   categories = await getCategories();
   console.log(categories);
-  let updateCategories = new schedule.scheduleJob("*/5 * * * *", function () {
-    categories = await getCategories();
-  });
+  let updateCategories = new schedule.scheduleJob(
+    "*/5 * * * *",
+    async function () {
+      categories = await getCategories();
+    }
+  );
 };
 
 exports.translate = async function (queryCommand) {
@@ -81,7 +84,9 @@ function parse(queryCommand) {
     //assume no category input
     category = "";
   } else {
-    category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex).toLowerCase());
+    category = capitaliseFirstLetter(
+      queryCommand.substring(0, spaceIndex).toLowerCase()
+    );
   }
   let query = "";
   if (categories.includes(category)) {
