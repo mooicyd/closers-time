@@ -11,6 +11,7 @@ exports.setup = async function () {
     "*/5 * * * *",
     async function () {
       categories = await getCategories();
+      console.log(`Categories updated to: ${categories}`);
     }
   );
 };
