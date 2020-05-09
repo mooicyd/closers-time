@@ -2,7 +2,7 @@ const { google } = require("googleapis");
 const { MessageEmbed } = require("discord.js");
 const sheets = google.sheets({ version: "v4" });
 const schedule = require("node-schedule-tz");
-const categories = [];
+let categories = [];
 
 exports.setup = async function () {
   categories = await getCategories();
@@ -22,24 +22,8 @@ exports.translate = async function (queryCommand) {
       `You may view the spreadsheet for the list of items and aliases: ${sheetUrl}\nFormat for searching item: @Closers Bot#4086 find [category] <part of item name/alias>\nCategory defaults to "All" if there is no category`,
     ];
   }
-  let category = "";
-  let spaceIndex = queryCommand.indexOf(" ");
 
-  if (spaceIndex < 0) {
-    //assume no category input
-    category = "";
-  } else {
-    category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex));
-  }
-
-  let query = "";
-  if (categories.includes(category)) {
-    query = queryCommand.substring(spaceIndex + 1);
-    console.log(query);
-  } else {
-    category = "All";
-    query = queryCommand;
-  }
+  let { category, query } = parse(queryCommand);
 
   const params = {
     spreadsheetId: process.env.SPREADSHEET_ID,
@@ -89,6 +73,26 @@ exports.translate = async function (queryCommand) {
     console.log(e);
   }
 };
+
+function parse(queryCommand) {
+  let category = "";
+  let spaceIndex = queryCommand.indexOf(" ");
+  if (spaceIndex < 0) {
+    //assume no category input
+    category = "";
+  } else {
+    category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex));
+  }
+  let query = "";
+  if (categories.includes(category)) {
+    query = queryCommand.substring(spaceIndex + 1);
+    console.log(query);
+  } else {
+    category = "All";
+    query = queryCommand;
+  }
+  return { category, query };
+}
 
 function capitaliseFirstLetter([first, ...rest]) {
   return [first.toUpperCase(), ...rest].join("");
