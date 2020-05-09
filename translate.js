@@ -8,7 +8,7 @@ exports.setup = async function () {
   categories = await getCategories();
   console.log(categories);
   let updateCategories = new schedule.scheduleJob("*/5 * * * *", function () {
-    categories = getCategories();
+    categories = await getCategories();
   });
 };
 
@@ -81,12 +81,11 @@ function parse(queryCommand) {
     //assume no category input
     category = "";
   } else {
-    category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex));
+    category = capitaliseFirstLetter(queryCommand.substring(0, spaceIndex).toLowerCase());
   }
   let query = "";
   if (categories.includes(category)) {
     query = queryCommand.substring(spaceIndex + 1);
-    console.log(query);
   } else {
     category = "All";
     query = queryCommand;
