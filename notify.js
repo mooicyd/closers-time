@@ -36,7 +36,7 @@ const OF_S_TIMES = [0, 1];
 const OF_IMG = "\nhttps://imgur.com/DrfvjPv";
 
 const YOD_SEA = "Yod Sea (LV86) ";
-consD = "is open for today.";
+const DAY_START = "is open for today.";
 const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png";
 const SEA_DAYS = [3, 6, 0];
 
