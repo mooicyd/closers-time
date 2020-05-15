@@ -36,9 +36,18 @@ const OF_S_TIMES = [0, 1];
 const OF_IMG = "\nhttps://imgur.com/DrfvjPv";
 
 const YOD_SEA = "Yod Sea (LV86) ";
-const SEA_START = "is open for today.";
+consD = "is open for today.";
 const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png";
 const SEA_DAYS = [3, 6, 0];
+
+const TIAMAT = "Tiamat (LV87) ";
+const NM_TIAMAT = "[Nightmare] Tiamat (LV88) ";
+const DR_TIAMAT = "Dragon Tiamat (LV87) ";
+const NM_DR_TIAMAT = "[Nightmare] Dragon Tiamat (LV88) ";
+const TIAMAT_DAYS = [1, 6];
+const NM_TIAMAT_DAYS = [4, 0];
+const DR_TIAMAT_DAYS = [2, 6];
+const NM_DR_TIAMAT_DAYS = [5, 0];
 
 function setupSchedule(raidchannel) {
   let kovStartingRule = new schedule.RecurrenceRule();
@@ -71,7 +80,9 @@ function setupSchedule(raidchannel) {
   kofEndRule.hour = RAID_END_H;
 
   //Overflood timers
-  let ofLong = setupRules({ hours: OF_L_TIMES });
+  let ofLong = setupRules({
+    hours: OF_L_TIMES,
+  });
 
   ofLong.forEach(function (rule) {
     let messageObj = {
@@ -85,7 +96,10 @@ function setupSchedule(raidchannel) {
     scheduleMessage(messageObj);
   });
 
-  let ofShort = setupRules({ hours: OF_S_TIMES, min: HALF_HOUR });
+  let ofShort = setupRules({
+    hours: OF_S_TIMES,
+    min: HALF_HOUR,
+  });
 
   ofShort.forEach(function (rule) {
     let messageObj = {
@@ -180,7 +194,7 @@ function setupSchedule(raidchannel) {
     channel: raidchannel,
     dungeon: YOD_SEA,
     rule: sea_rule,
-    status: SEA_START,
+    status: DAY_START,
     img: SEA_IMG,
   };
   scheduleMessage(sea_days);
@@ -212,6 +226,62 @@ function setupSchedule(raidchannel) {
     img: KOV_IMG,
   };
   scheduleMessage(kov_days);
+
+  //Tiamat Day
+  let tiamat_day_rule = new schedule.RecurrenceRule();
+  tiamat_day_rule.minute = 1;
+  tiamat_day_rule.hour = 4;
+  tiamat_day_rule.dayOfWeek = TIAMAT_DAYS;
+  let tiamat_days = {
+    channel: raidchannel,
+    dungeon: TIAMAT,
+    rule: tiamat_day_rule,
+    status: WILL_OPEN,
+    img: "",
+  };
+  scheduleMessage(tiamat_days);
+
+  //Nightmare Tiamat Day
+  let nm_tiamat_day_rule = new schedule.RecurrenceRule();
+  nm_tiamat_day_rule.minute = 1;
+  nm_tiamat_day_rule.hour = 4;
+  nm_tiamat_day_rule.dayOfWeek = NM_TIAMAT_DAYS;
+  let nm_tiamat_days = {
+    channel: raidchannel,
+    dungeon: NM_TIAMAT,
+    rule: nm_tiamat_day_rule,
+    status: WILL_OPEN,
+    img: "",
+  };
+  scheduleMessage(nm_tiamat_days);
+
+  //Dragon Tiamat Day
+  let dr_tiamat_day_rule = new schedule.RecurrenceRule();
+  dr_tiamat_day_rule.minute = 1;
+  dr_tiamat_day_rule.hour = 4;
+  dr_tiamat_day_rule.dayOfWeek = DR_TIAMAT_DAYS;
+  let dr_tiamat_days = {
+    channel: raidchannel,
+    dungeon: DR_TIAMAT,
+    rule: dr_tiamat_day_rule,
+    status: WILL_OPEN,
+    img: "",
+  };
+  scheduleMessage(dr_tiamat_days);
+
+  //Nightmare Dragon Tiamat Day
+  let nm_dr_tiamat_day_rule = new schedule.RecurrenceRule();
+  nm_dr_tiamat_day_rule.minute = 1;
+  nm_dr_tiamat_day_rule.hour = 4;
+  nm_dr_tiamat_day_rule.dayOfWeek = TIAMAT_DAYS;
+  let nm_dr_tiamat_days = {
+    channel: raidchannel,
+    dungeon: NM_DR_TIAMAT,
+    rule: nm_dr_tiamat_day_rule,
+    status: WILL_OPEN,
+    img: "",
+  };
+  scheduleMessage(nm_dr_tiamat_days);
 }
 
 function copy(obj) {
