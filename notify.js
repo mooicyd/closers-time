@@ -273,7 +273,7 @@ function setupSchedule(raidchannel) {
   let nm_dr_tiamat_day_rule = new schedule.RecurrenceRule();
   nm_dr_tiamat_day_rule.minute = 1;
   nm_dr_tiamat_day_rule.hour = 4;
-  nm_dr_tiamat_day_rule.dayOfWeek = TIAMAT_DAYS;
+  nm_dr_tiamat_day_rule.dayOfWeek = NM_DR_TIAMAT_DAYS;
   let nm_dr_tiamat_days = {
     channel: raidchannel,
     dungeon: NM_DR_TIAMAT,
