@@ -236,7 +236,7 @@ function setupSchedule(raidchannel) {
     channel: raidchannel,
     dungeon: TIAMAT,
     rule: tiamat_day_rule,
-    status: WILL_OPEN,
+    status: DAY_START,
     img: "",
   };
   scheduleMessage(tiamat_days);
@@ -250,7 +250,7 @@ function setupSchedule(raidchannel) {
     channel: raidchannel,
     dungeon: NM_TIAMAT,
     rule: nm_tiamat_day_rule,
-    status: WILL_OPEN,
+    status: DAY_START,
     img: "",
   };
   scheduleMessage(nm_tiamat_days);
@@ -264,7 +264,7 @@ function setupSchedule(raidchannel) {
     channel: raidchannel,
     dungeon: DR_TIAMAT,
     rule: dr_tiamat_day_rule,
-    status: WILL_OPEN,
+    status: DAY_START,
     img: "",
   };
   scheduleMessage(dr_tiamat_days);
@@ -278,7 +278,7 @@ function setupSchedule(raidchannel) {
     channel: raidchannel,
     dungeon: NM_DR_TIAMAT,
     rule: nm_dr_tiamat_day_rule,
-    status: WILL_OPEN,
+    status: DAY_START,
     img: "",
   };
   scheduleMessage(nm_dr_tiamat_days);
