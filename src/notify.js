@@ -85,14 +85,14 @@ function setupSchedule(raidchannel) {
 
   //King of the Ocean Timers
    let kooStartingRule = copy(kovStartingRule)
-  kooStartingRule.dayOfWeek = KOF_DAYS
+  kooStartingRule.dayOfWeek = KOO_DAYS
 
   let kooStartRule = copy(kooStartingRule)
   kooStartRule.hour = RAID_START_H
 
   let kooEndingRule = copy(kooStartRule)
   kooEndingRule.hour = RAID_ENDING_H
-  kooEndingRule.dayOfWeek = NO_KOF_DAYS
+  kooEndingRule.dayOfWeek = NO_KOO_DAYS
 
   let kooEndRule = copy(kooEndingRule)
   kooEndRule.hour = RAID_END_H
