@@ -1,9 +1,9 @@
 const { Client } = require("discord.js");
-const notify = require("./notify");
+const notify = require("./src/notify");
 const client = new Client();
-const translator = require("./translate");
-const help = require("./help");
-const info = require("./info");
+const translator = require("./src/translate");
+const help = require("./src/help");
+const info = require("./src/info");
 const space_delimit = /\s+/;
 
 let raidchannel;
