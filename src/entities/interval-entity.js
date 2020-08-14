@@ -1,4 +1,5 @@
 import { DUNGEONS, OPEN_DAYS, STATUS, OPEN_HOURS, OPEN_MIN, DURATION } from '../constants'
+import { createRule } from '../helpers/common-helper'
 
 export default class IntervalEntity {
   constructor({ channel, dungeon }) {

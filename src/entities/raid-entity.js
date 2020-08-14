@@ -1,4 +1,5 @@
 import { DUNGEONS, OPEN_DAYS, STATUS, CLOSE_DAYS, DURATION } from '../constants'
+import { createRule } from '../helpers/common-helper'
 
 export default class RaidEntity {
   constructor({ channel, dungeon }) {

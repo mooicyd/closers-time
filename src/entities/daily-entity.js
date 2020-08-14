@@ -1,4 +1,5 @@
 import { DUNGEONS, OPEN_DAYS, STATUS } from '../constants'
+import { createRule } from '../helpers/common-helper'
 
 export default class DailyEntity {
   constructor({ channel, dungeon }) {
