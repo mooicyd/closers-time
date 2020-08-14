@@ -1,5 +1,5 @@
 const schedule = require("node-schedule-tz")
-const v8 = require("v8")
+import { DUNGEONS, STATUS, IMAGES, OPEN_DAYS, CLOSE_DAYS } from './constants'
 
 const time_regex = /([0-9]+)((:|.)([0-9]+))*/
 const time_delimit = /(:|.)/
@@ -13,19 +13,6 @@ const TWO_HOUR = 7200000
 const THIRTY_MIN = 1800000
 const FIVE_MIN = 300000
 const HALF_HOUR = 30
-const KOF_DAYS = [2, 4, 6]
-const NO_KOF_DAYS = [3, 5, 0]
-const NO_KOV_DAYS = [0, 2, 4, 6]
-const KOV_DAYS = [1, 3, 5, 0]
-const KOV_RAID = "King of Voracity raid (LV86) "
-const KOF_RAID = "King of Flies raid (LV85) "
-const RAID_STARTING = "will open in 1 hour. Get Ready!"
-const RAID_START = "has opened. The raid will remain open for the next 10 hours."
-const RAID_ENDING = "will end in 2 hours."
-const RAID_END = "has ended."
-const WILL_OPEN = "will open today in 12 hours."
-const KOF_IMG = "\nhttps://imgur.com/PJVbqvz"
-const KOV_IMG = "\nhttps://imgur.com/eVboHcQ"
 
 const OVERFLOOD = "Overflood "
 const OF_L_START = "has opened. The dungeon will remain open for 1 hour."
@@ -37,66 +24,16 @@ const OF_IMG = "\nhttps://imgur.com/DrfvjPv"
 // const YOD_SEA = "Yod Sea (LV86) "
 // const SEA_IMG = "\nhttps://i.imgur.com/IOzsjaZ.png"
 // const SEA_DAYS = [3, 6, 0]
-const DAY_START = "is open for today."
 
-const TIAMAT = "Tiamat (LV87) "
-const NM_TIAMAT = "[Nightmare] Tiamat (LV88) "
-const DR_TIAMAT = "Dragon Tiamat (LV87) "
-const NM_DR_TIAMAT = "[Nightmare] Dragon Tiamat (LV88) "
 const TIAMAT_DAYS = [1, 6]
 const NM_TIAMAT_DAYS = [5, 0]
 const DR_TIAMAT_DAYS = [2, 0]
 const NM_DR_TIAMAT_DAYS = [3, 6]
 
-const KOO_RAID = "King of the Ocean raid (LV87)"
-const KOO_DAYS = [4, 6, 0]
-const NO_KOO_DAYS = [5, 0, 1]
-const KOO_IMG = "\nhttps://media.discordapp.net/attachments/319463845552848907/743715872627097620/SCREEN_CAPTURE_2020-08-13_20-36-32-614.PNG?width=436&height=139"
-
-function setupSchedule(raidchannel) {
-  let kovStartingRule = new schedule.RecurrenceRule()
-  kovStartingRule.minute = 0
-  kovStartingRule.hour = RAID_STARTING_H
-  kovStartingRule.dayOfWeek = KOV_DAYS
-
-  let kovStartRule = copy(kovStartingRule)
-  kovStartRule.hour = RAID_START_H
-
-  let kovEndingRule = copy(kovStartRule)
-  kovEndingRule.hour = RAID_ENDING_H
-  kovEndingRule.dayOfWeek = NO_KOV_DAYS
-
-  let kovEndRule = copy(kovEndingRule)
-  kovEndRule.hour = RAID_END_H
-
-  //King of Flies Timers
-  let kofStartingRule = copy(kovStartingRule)
-  kofStartingRule.dayOfWeek = KOF_DAYS
-
-  let kofStartRule = copy(kofStartingRule)
-  kofStartRule.hour = RAID_START_H
-
-  let kofEndingRule = copy(kofStartRule)
-  kofEndingRule.hour = RAID_ENDING_H
-  kofEndingRule.dayOfWeek = NO_KOF_DAYS
-
-  let kofEndRule = copy(kofEndingRule)
-  kofEndRule.hour = RAID_END_H
-
-  //King of the Ocean Timers
-   let kooStartingRule = copy(kovStartingRule)
-  kooStartingRule.dayOfWeek = KOO_DAYS
-
-  let kooStartRule = copy(kooStartingRule)
-  kooStartRule.hour = RAID_START_H
-
-  let kooEndingRule = copy(kooStartRule)
-  kooEndingRule.hour = RAID_ENDING_H
-  kooEndingRule.dayOfWeek = NO_KOO_DAYS
-
-  let kooEndRule = copy(kooEndingRule)
-  kooEndRule.hour = RAID_END_H
-
+function setupSchedule(channel) {
+  scheduleRaidNotification({ raid: 'KOF', channel })
+  scheduleRaidNotification({ raid: 'KOV', channel })
+  scheduleRaidNotification({ raid: 'KOO', channel })
 
   //Overflood timers
   let ofLong = setupRules({
@@ -105,7 +42,7 @@ function setupSchedule(raidchannel) {
 
   ofLong.forEach(function (rule) {
     let messageObj = {
-      channel: raidchannel,
+      channel: channel,
       dungeon: OVERFLOOD,
       rule: rule,
       status: OF_L_START,
@@ -122,7 +59,7 @@ function setupSchedule(raidchannel) {
 
   ofShort.forEach(function (rule) {
     let messageObj = {
-      channel: raidchannel,
+      channel: channel,
       dungeon: OVERFLOOD,
       rule: rule,
       status: OF_S_START,
@@ -132,114 +69,7 @@ function setupSchedule(raidchannel) {
     scheduleMessage(messageObj)
   })
 
-  //King of Voracity
-  let kov_starting = {
-    channel: raidchannel,
-    dungeon: KOV_RAID,
-    rule: kovStartingRule,
-    status: RAID_STARTING,
-    timeout: ONE_HOUR,
-  }
-  let kov_start = {
-    channel: raidchannel,
-    dungeon: KOV_RAID,
-    rule: kovStartRule,
-    status: RAID_START,
-    img: KOV_IMG,
-  }
-  let kov_ending = {
-    channel: raidchannel,
-    dungeon: KOV_RAID,
-    rule: kovEndingRule,
-    status: RAID_ENDING,
-    timeout: TWO_HOUR,
-    img: KOV_IMG,
-  }
-  let kov_end = {
-    channel: raidchannel,
-    dungeon: KOV_RAID,
-    rule: kovEndRule,
-    status: RAID_END,
-  }
-
-  scheduleMessage(kov_starting)
-  scheduleMessage(kov_start)
-  scheduleMessage(kov_ending)
-  scheduleMessage(kov_end)
-
-  //King of Flies
-  let kof_starting = {
-    channel: raidchannel,
-    dungeon: KOF_RAID,
-    rule: kofStartingRule,
-    status: RAID_STARTING,
-    timeout: ONE_HOUR,
-  }
-  let kof_start = {
-    channel: raidchannel,
-    dungeon: KOF_RAID,
-    rule: kofStartRule,
-    status: RAID_START,
-    img: KOF_IMG,
-  }
-  let kof_ending = {
-    channel: raidchannel,
-    dungeon: KOF_RAID,
-    rule: kofEndingRule,
-    status: RAID_ENDING,
-    timeout: TWO_HOUR,
-    img: KOF_IMG,
-  }
-  let kof_end = {
-    channel: raidchannel,
-    dungeon: KOF_RAID,
-    rule: kofEndRule,
-    status: RAID_END,
-  }
-
-  scheduleMessage(kof_starting)
-  scheduleMessage(kof_start)
-  scheduleMessage(kof_ending)
-  scheduleMessage(kof_end)
-
-
-  
-  //King of Voracity
-  let koo_starting = {
-    channel: raidchannel,
-    dungeon: KOO_RAID,
-    rule: kooStartingRule,
-    status: RAID_STARTING,
-    timeout: ONE_HOUR,
-  }
-  let koo_start = {
-    channel: raidchannel,
-    dungeon: KOO_RAID,
-    rule: kooStartRule,
-    status: RAID_START,
-    img: KOO_IMG,
-  }
-  let koo_ending = {
-    channel: raidchannel,
-    dungeon: KOO_RAID,
-    rule: kooEndingRule,
-    status: RAID_ENDING,
-    timeout: TWO_HOUR,
-    img: KOO_IMG,
-  }
-  let koo_end = {
-    channel: raidchannel,
-    dungeon: KOO_RAID,
-    rule: kooEndRule,
-    status: RAID_END,
-  }
-
-  scheduleMessage(koo_starting)
-  scheduleMessage(koo_start)
-  scheduleMessage(koo_ending)
-  scheduleMessage(koo_end)
-
-  clearMessages(raidchannel)
+  clearMessages(channel)
 
   //Yod Sea
   // let sea_rule = new schedule.RecurrenceRule()
@@ -250,98 +80,62 @@ function setupSchedule(raidchannel) {
   //   channel: raidchannel,
   //   dungeon: YOD_SEA,
   //   rule: sea_rule,
-  //   status: DAY_START,
+  //   status: STATUS['DAY_START'],
   //   img: SEA_IMG,
   // }
   // scheduleMessage(sea_days)
 
-  //KoF day
-  let kof_day_rule = new schedule.RecurrenceRule()
-  kof_day_rule.minute = 1
-  kof_day_rule.hour = 4
-  kof_day_rule.dayOfWeek = KOF_DAYS
-  let kof_days = {
-    channel: raidchannel,
-    dungeon: KOF_RAID,
-    rule: kof_day_rule,
-    status: WILL_OPEN,
-    img: KOF_IMG,
-  }
-  scheduleMessage(kof_days)
-
-  //KoV day
-  let kov_day_rule = new schedule.RecurrenceRule()
-  kov_day_rule.minute = 1
-  kov_day_rule.hour = 4
-  kov_day_rule.dayOfWeek = KOV_DAYS
-  let kov_days = {
-    channel: raidchannel,
-    dungeon: KOV_RAID,
-    rule: kov_day_rule,
-    status: WILL_OPEN,
-    img: KOV_IMG,
-  }
-  scheduleMessage(kov_days)
-
   //Tiamat Day
-  let tiamat_day_rule = new schedule.RecurrenceRule()
-  tiamat_day_rule.minute = 1
-  tiamat_day_rule.hour = 4
-  tiamat_day_rule.dayOfWeek = TIAMAT_DAYS
+  // let tiamat_day_rule = createRule({ minute: 1, dayOfWeek: TIAMAT_DAYS })
   let tiamat_days = {
-    channel: raidchannel,
-    dungeon: TIAMAT,
-    rule: tiamat_day_rule,
-    status: DAY_START,
+    channel: channel,
+    dungeon: DUNGEONS['TIAMAT'],
+    rule: createRule({ minute: 1, dayOfWeek: TIAMAT_DAYS }),
+    status: STATUS['DAY_START'],
     img: "",
   }
   scheduleMessage(tiamat_days)
 
   //Nightmare Tiamat Day
-  let nm_tiamat_day_rule = new schedule.RecurrenceRule()
-  nm_tiamat_day_rule.minute = 1
-  nm_tiamat_day_rule.hour = 4
-  nm_tiamat_day_rule.dayOfWeek = NM_TIAMAT_DAYS
+  // let nm_tiamat_day_rule = createRule({ minute: 1, dayOfWeek: NM_TIAMAT_DAYS })
   let nm_tiamat_days = {
-    channel: raidchannel,
-    dungeon: NM_TIAMAT,
-    rule: nm_tiamat_day_rule,
-    status: DAY_START,
+    channel: channel,
+    dungeon: DUNGEONS['NM_TIAMAT'],
+    rule: createRule({ minute: 1, dayOfWeek: NM_TIAMAT_DAYS }),
+    status: STATUS['DAY_START'],
     img: "",
   }
   scheduleMessage(nm_tiamat_days)
 
   //Dragon Tiamat Day
-  let dr_tiamat_day_rule = new schedule.RecurrenceRule()
-  dr_tiamat_day_rule.minute = 1
-  dr_tiamat_day_rule.hour = 4
-  dr_tiamat_day_rule.dayOfWeek = DR_TIAMAT_DAYS
+  // let dr_tiamat_day_rule = createRule({ minute: 1, dayOfWeek: DR_TIAMAT_DAYS })
   let dr_tiamat_days = {
-    channel: raidchannel,
-    dungeon: DR_TIAMAT,
-    rule: dr_tiamat_day_rule,
-    status: DAY_START,
+    channel: channel,
+    dungeon: DUNGEONS['DR_TIAMAT'],
+    rule: createRule({ minute: 1, dayOfWeek: DR_TIAMAT_DAYS }),
+    status: STATUS['DAY_START'],
     img: "",
   }
   scheduleMessage(dr_tiamat_days)
 
   //Nightmare Dragon Tiamat Day
-  let nm_dr_tiamat_day_rule = new schedule.RecurrenceRule()
-  nm_dr_tiamat_day_rule.minute = 1
-  nm_dr_tiamat_day_rule.hour = 4
-  nm_dr_tiamat_day_rule.dayOfWeek = NM_DR_TIAMAT_DAYS
+  // let nm_dr_tiamat_day_rule = createRule({ minute: 1, dayOfWeek: NM_DR_TIAMAT_DAYS })
   let nm_dr_tiamat_days = {
-    channel: raidchannel,
-    dungeon: NM_DR_TIAMAT,
-    rule: nm_dr_tiamat_day_rule,
-    status: DAY_START,
+    channel: channel,
+    dungeon: DUNGEONS['NM_DR_TIAMAT'],
+    rule: createRule({ minute: 1, dayOfWeek: NM_DR_TIAMAT_DAYS }),
+    status: STATUS['DAY_START'],
     img: "",
   }
   scheduleMessage(nm_dr_tiamat_days)
 }
 
-function copy(obj) {
-  return v8.deserialize(v8.serialize(obj))
+function createRule({ minute = 0, hour = 4, dayOfWeek }) {
+  const rule = new schedule.RecurrenceRule()
+  rule.minute = minute
+  rule.hour = hour
+  rule.dayOfWeek = dayOfWeek
+  return rule
 }
 
 function sendMessage(message) {
@@ -367,18 +161,54 @@ function scheduleMessage(message) {
 function setupRules(obj) {
   let rules = new Array()
   obj.hours.forEach(function (hour) {
-    let rule = new schedule.RecurrenceRule()
-    rule.minute = obj.min ? obj.min : 0
-    rule.hour = hour
+    let rule = createRule({ hour, minute: obj.min })
     rules.push(rule)
   })
   return rules
 }
 
+function scheduleRaidNotification({ dungeon, channel }) {
+  let starting = {
+    channel: channel,
+    dungeon: DUNGEONS[dungeon],
+    rule: createRule({ hour: RAID_STARTING_H, dayOfWeek: OPEN_DAYS[dungeon] }),
+    status: STATUS.STARTING,
+    timeout: ONE_HOUR,
+  }
+  let start = {
+    channel: channel,
+    dungeon: DUNGEONS[dungeon],
+    rule: createRule({ hour: RAID_START_H, dayOfWeek: OPEN_DAYS[dungeon] }),
+    status: STATUS.START,
+    img: IMAGES[dungeon],
+  }
+  let ending = {
+    channel: channel,
+    dungeon: DUNGEONS[dungeon],
+    rule: createRule({ hour: RAID_ENDING_H, dayOfWeek: CLOSE_DAYS[dungeon] }),
+    status: STATUS.ENDING,
+    timeout: TWO_HOUR,
+    img: IMAGES[dungeon],
+  }
+  let end = {
+    channel: channel,
+    dungeon: DUNGEONS[dungeon],
+    rule: createRule({ hour: RAID_END_H, dayOfWeek: CLOSE_DAYS[dungeon] }),
+    status: STATUS.END,
+  }
+  let willOpen = {
+    channel: channel,
+    dungeon: DUNGEONS[dungeon],
+    rule: createRule({ minute: 1, dayOfWeek: OPEN_DAYS[dungeon] }),
+    status: STATUS.WILL_OPEN,
+    img: IMAGES[dungeon],
+  }
+  // scheduleMessage([willOpen, starting, start, ending, end])
+
+}
+
 function clearMessages(channel) {
-  let cleanup_rule = new schedule.RecurrenceRule()
-  cleanup_rule.minute = 0
-  cleanup_rule.hour = 4
+  let cleanup_rule = createRule()
 
   let cleanup = schedule.scheduleJob(cleanup_rule, function () {
     channel

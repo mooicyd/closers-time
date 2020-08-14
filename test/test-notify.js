@@ -1,5 +1,5 @@
 const assert = require("assert");
-const notify = require("../notify");
+const notify = require("../src/notify");
 const schedule = require("node-schedule-tz");
 const { Client } = require("discord.js");
 const dotenv = require("dotenv");
