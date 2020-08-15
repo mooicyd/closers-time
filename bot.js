@@ -5,6 +5,7 @@ const translator = require("./src/translate");
 const help = require("./src/help");
 const info = require("./src/info");
 const space_delimit = /\s+/;
+require('dotenv').config()
 
 let raidchannel;
 
