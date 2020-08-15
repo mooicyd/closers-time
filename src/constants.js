@@ -24,7 +24,9 @@ const STATUS = {
 const IMAGES = {
   KOF: "\nhttps://imgur.com/PJVbqvz",
   KOV: "\nhttps://imgur.com/eVboHcQ",
-  KOO: "\nhttps://media.discordapp.net/attachments/319463845552848907/743715872627097620/SCREEN_CAPTURE_2020-08-13_20-36-32-614.PNG?width=436&height=139"
+  KOO: "\nhttps://media.discordapp.net/attachments/319463845552848907/743715872627097620/SCREEN_CAPTURE_2020-08-13_20-36-32-614.PNG?width=436&height=139",
+  OVERFLOOD_L: "\nhttps://imgur.com/DrfvjPv",
+  OVERFLOOD_S: "\nhttps://imgur.com/DrfvjPv"
 }
 
 const OPEN_DAYS = {
