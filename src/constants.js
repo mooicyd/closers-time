@@ -33,10 +33,10 @@ const OPEN_DAYS = {
   KOF: [2, 4, 6],
   KOV: [1, 3, 5, 0],
   KOO: [4, 6, 0],
-  TIAMAT_DAYS: [1, 6],
-  NM_TIAMAT_DAYS: [5, 0],
-  DR_TIAMAT_DAYS: [2, 0],
-  NM_DR_TIAMAT_DAYS: [3, 6],
+  TIAMAT: [1, 6],
+  NM_TIAMAT: [5, 0],
+  DR_TIAMAT: [2, 0],
+  NM_DR_TIAMAT: [3, 6]
 }
 
 const RAID_HOURS = {
