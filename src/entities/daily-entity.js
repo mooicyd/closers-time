@@ -1,11 +1,11 @@
-import { DUNGEONS, OPEN_DAYS, STATUS } from '../constants'
-import { createRule } from '../helpers/common-helper'
+const { DUNGEONS, OPEN_DAYS, STATUS, IMAGES } = require('../constants')
+const { createRule } = require('../helpers/schedule-helper')
 
-export default class DailyEntity {
+class DailyEntity {
   constructor({ channel, dungeon }) {
-    let messages = []
+    let dailyMessages = []
 
-    messages.push({
+    dailyMessages.push({
       channel: channel,
       dungeon: DUNGEONS[dungeon],
       rule: createRule({ minute: 1, dayOfWeek: OPEN_DAYS[dungeon] }),
@@ -13,10 +13,12 @@ export default class DailyEntity {
       img: IMAGES[dungeon]
     })
 
-    this.messages = messages
+    this.dailyMessages = dailyMessages
   }
 
   get messages() {
-    return this.messages
+    return this.dailyMessages
   }
 }
+
+module.exports = { DailyEntity }

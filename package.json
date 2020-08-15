@@ -6,7 +6,7 @@
     "node": "13.x"
   },
   "scripts": {
-    "test": "mocha ./test/test-notify.js"
+    "test": "mocha ./src/test/notify.spec.js"
   },
   "main": "index.js",
   "keywords": [],

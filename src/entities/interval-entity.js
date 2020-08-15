@@ -1,9 +1,9 @@
-import { DUNGEONS, OPEN_DAYS, STATUS, OPEN_HOURS, OPEN_MIN, DURATION } from '../constants'
-import { createRule } from '../helpers/common-helper'
+const { DUNGEONS, OPEN_DAYS, STATUS, OPEN_HOURS, DURATION, OPEN_MIN, IMAGES } = require('../constants')
+const { createRule } = require('../helpers/schedule-helper')
 
-export default class IntervalEntity {
+class IntervalEntity {
   constructor({ channel, dungeon }) {
-    let messages = []
+    let intervalMessages = []
     let openTimings = OPEN_HOURS[dungeon]
 
     openTimings.forEach(timing => {
@@ -15,13 +15,15 @@ export default class IntervalEntity {
         timeout: DURATION[dungeon],
         img: IMAGES[dungeon]
       }
-      messages.push(message)
+      intervalMessages.push(message)
     })
 
-    this.messages = messages
+    this.intervalMessages = intervalMessages
   }
 
   get messages() {
-    return this.messages
+    return this.intervalMessages
   }
 }
+
+module.exports = { IntervalEntity }

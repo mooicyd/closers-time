@@ -1,8 +1,8 @@
 const schedule = require("node-schedule-tz")
-import { DUNGEONS, STATUS, IMAGES, OPEN_DAYS, CLOSE_DAYS } from './constants'
-import RaidEntity from './entities/raid-entity'
-import IntervalEntity from './entities/interval-entity'
-import { createRule } from './helpers/common-helper'
+const { RaidEntity } = require('./entities/raid-entity')
+const { DailyEntity } = require('./entities/daily-entity')
+const { IntervalEntity } = require('./entities/interval-entity')
+const { createRule } = require('./helpers/schedule-helper')
 
 const time_regex = /([0-9]+)((:|.)([0-9]+))*/
 const time_delimit = /(:|.)/
@@ -28,7 +28,7 @@ function setupSchedule(channel) {
     messages.forEach(message => scheduleMessage(message))
   })
 
-  clearMessages(channel)
+  scheduleClear(channel)
 }
 
 function sendMessage(message) {
@@ -37,13 +37,13 @@ function sendMessage(message) {
       notif.delete({ timeout: message.timeout })
     }
   })
-  console.log(`Message sent: ${message.dungeon}${message.status}`)
+  console.log(`Message sent: ${message.dungeon} ${message.status}`)
   return true
 }
 
 function createMessage(message) {
-  console.log(`Message created: ${message.dungeon}${message.status}`)
-  return `${message.dungeon}${message.status}${message.img ? message.img : ""}`
+  console.log(`Message created: ${message.dungeon} ${message.status}`)
+  return `${message.dungeon} ${message.status}${message.img ? message.img : ""}`
 }
 
 function scheduleMessage(message) {
@@ -51,8 +51,8 @@ function scheduleMessage(message) {
   return job
 }
 
-function clearMessages(channel) {
-  let cleanup_rule = createRule()
+function scheduleClear(channel) {
+  let cleanup_rule = createRule({})
 
   schedule.scheduleJob(cleanup_rule, function () {
     channel
